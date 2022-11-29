@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import {Symbol} from "./grammar";
+import {Symbol} from "./grammarModels/grammar1_0";
 export class TSNode {
     data: Symbol
     public left: TSNode | null

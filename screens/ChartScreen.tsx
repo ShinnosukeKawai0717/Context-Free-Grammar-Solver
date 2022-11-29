@@ -2,16 +2,15 @@
 
 import React from 'react';
 import {Button, Text, View, StyleSheet} from 'react-native';
-import {useNavigation, useRoute} from "@react-navigation/native";
 
-const ChartScreen = () => {
-    const navigation = useNavigation();
-    const route = useRoute<any>();
-    const {string, grammar} = route.params
-    console.log(string)
+const ChartScreen = (props: {route: any}) => {
+    const {
+        sentence
+    } = props.route.params
+
     return (
         <View style={styles.container}>
-
+            <Text>{sentence}</Text>
         </View>
     );
 };

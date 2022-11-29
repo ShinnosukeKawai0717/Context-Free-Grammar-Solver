@@ -1,6 +1,6 @@
 /*eslint-disable*/
 
-import {TSNode} from "./TernaryTree";
+import {TSNode} from "../TernaryTree";
 
 export class Symbol {
     private readonly _val: string
@@ -24,19 +24,19 @@ export class Symbol {
     }
 }
 
-export class Grammar {
-    private readonly _grammar: Map<Symbol, string[]>
+export class Grammar1_0 {
+    private readonly _grammar: Map<Symbol, Symbol[][]>
 
     public get grammar() {
         return this._grammar
     }
     constructor(arr: string[]) {
-        this._grammar = new Map<Symbol, string[]>();
+        this._grammar = new Map<Symbol, Symbol[][]>();
         arr.forEach((row, index) => {
             let lhs = row.split(" -> ")[0]
-            let nonTerminal = new Symbol(lhs)
-            let regex = row.split(" -> ")[1]
-            let rhs = regex.split(" | ")
+            let lhsSymbol = new Symbol(lhs)
+            let rule = row.split(" -> ")[1]
+            let rhs = rule.split(" | ")
             const twoDArr: Symbol[][] = []
             for (const rh of rhs) {
                 let symbols: Symbol[] = []
@@ -46,7 +46,7 @@ export class Grammar {
                 })
                 twoDArr.push(symbols)
             }
-            this._grammar.set(nonTerminal, rhs)
+            this._grammar.set(lhsSymbol, twoDArr)
         })
     }
 
@@ -66,12 +66,7 @@ export class Grammar {
         let value = this.getValue(symbol)
         if (value) {
             let randomIndex = Math.floor(Math.random() * value.length)
-            let randomValue = value[randomIndex]
-            let symbols = randomValue.split(" ")
-            let symbolList: Symbol[] = []
-            symbols.forEach(symbol => {
-                symbolList.push(new Symbol(symbol))
-            })
+            let symbolList = value[randomIndex]
             symbolList.forEach(symbol => {
                 if (!symbol.isTerminal) {
                     this.generate(symbol)

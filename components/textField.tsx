@@ -18,7 +18,7 @@ const InputField = (props: {myOnTextChange: (text: string) => void,
             value={userInput}
             cursorColor={"gray"}
             placeholder={"type here..."}
-            keyboardType={"number-pad"}
+            keyboardType={"web-search"}
             textAlign={"left"}>
         </TextInput>
     );

@@ -3,7 +3,7 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Text, StyleSheet, View, Dimensions, FlatList, Button, GestureResponderEvent} from 'react-native';
 import {TernaryTree, TSNode} from "../models/TernaryTree";
-import {Grammar, Symbol} from "../models/grammar";
+import {Grammar1_0, Symbol} from "../models/grammarModels/grammar1_0";
 import Item from "../components/item";
 import InputField from "../components/textField";
 import GenerateButton from "../components/button";
@@ -23,29 +23,28 @@ const MainScreen = (props: {navigation: NavigationProp<object>}) => {
     const [userInput, setUserInput] = useState<string>('')
     const prevInput = useRef<string>("")
     const myGrammar = useMemo(() => {
-        const myTree = new TernaryTree(new TSNode(new Symbol("S")))
-        myTree.insert(["NP", "VP"])
-        myTree.insert(["PN"])
-        myTree.insert(["she"])
-        myTree.insert(["VP", "PP"])
-        myTree.insert(["V", "NP"])
-        myTree.insert(["eats"])
-        myTree.insert(["NP"])
-        myTree.insert(["Det", "N"])
-        myTree.insert(["a"])
-        myTree.insert(["fish"])
-        myTree.insert(["P", "NP"])
-        myTree.insert(["P"])
-        myTree.insert(["with"])
-        myTree.insert(["Det", "N"])
-        myTree.insert(["a"])
-        myTree.insert(["fork"])
+        // const myTree = new TernaryTree(new TSNode(new Symbol("S")))
+        // myTree.insert(["NP", "VP"])
+        // myTree.insert(["PN"])
+        // myTree.insert(["she"])
+        // myTree.insert(["VP", "PP"])
+        // myTree.insert(["V", "NP"])
+        // myTree.insert(["eats"])
+        // myTree.insert(["NP"])
+        // myTree.insert(["Det", "N"])
+        // myTree.insert(["a"])
+        // myTree.insert(["fish"])
+        // myTree.insert(["P", "NP"])
+        // myTree.insert(["P"])
+        // myTree.insert(["with"])
+        // myTree.insert(["Det", "N"])
+        // myTree.insert(["a"])
+        // myTree.insert(["fork"])
         const palindrome = [
-            "S -> aa A | A | lam",
-            "A -> A b | lam"
+            "S -> a S a | b S b | a | b | lam"
         ]
 
-        return new Grammar(palindrome);
+        return new Grammar1_0(palindrome);
     }, []);
 
     useEffect(() => {
@@ -55,8 +54,7 @@ const MainScreen = (props: {navigation: NavigationProp<object>}) => {
     const itemDidTap = (sentence: string) => {
         // @ts-ignore
         navigation.navigate("Chart", {
-            string: sentence,
-            grammar: myGrammar
+            sentence: sentence
         })
     }
 
