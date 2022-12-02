@@ -57,6 +57,10 @@ export class RHS {
         return this._terms
     }
 
+    public termsToString() {
+        return this.terms.join(", ")
+    }
+
     public get hasDot() {
         return this._hasDot
     }
@@ -89,7 +93,7 @@ export class RHS {
         return undefined
     }
 
-    public equals(object: RHS) {
-        return arrayEquals(this._terms, object.terms) && this._dot == object.dotIndex && this._hasDot == object.hasDot;
+    public equals(other: RHS) {
+        return arrayEquals(this._terms, other.terms) && this._dot == other.dotIndex;
     }
 }

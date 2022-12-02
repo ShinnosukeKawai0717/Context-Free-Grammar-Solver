@@ -2,15 +2,15 @@
 export class Sentence {
     private readonly _words: string[]
 
-    constructor(string: string | null) {
-        if (string!= null) {
-            this._words = string.split(" ")
-            return
-        }
-        this._words = []
+    constructor(string: string = "") {
+        this._words = string.split(" ").filter((value) => {return value != ""})
     }
 
     public get words() {
         return this._words
+    }
+
+    public getSentence() {
+        return this.words.join(" ")
     }
 }

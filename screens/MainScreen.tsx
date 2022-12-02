@@ -1,79 +1,74 @@
 /*eslint-disable*/
 
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {Text, StyleSheet, View, Dimensions, FlatList, Button, GestureResponderEvent} from 'react-native';
-import {TernaryTree, TSNode} from "../models/TernaryTree";
-import {Grammar1_0, Symbol} from "../models/grammarModels/grammar1_0";
-import Item from "../components/item";
+import {Text, StyleSheet, View, Dimensions, FlatList, ListRenderItemInfo} from 'react-native';
+import SentenceItem from "../components/sentenceItem";
 import InputField from "../components/textField";
 import GenerateButton from "../components/button";
 import {
     NavigationProp
 } from "@react-navigation/native";
+import {CFGrammar, Grammar} from "../models/grammarModels/grammar";
+import {Sentence} from "../models/grammarModels/sentence";
+import {StaticStorage} from "./ChartScreen";
 
-function getRandomNumber() {
-    return Math.random() * 20;
-}
-
-const MainScreen = (props: {navigation: NavigationProp<object>}) => {
+const MainScreen = (props: { navigation: NavigationProp<object> }) => {
     const {
         navigation
     } = props
-    const [strings, setStrings] = useState<string[]>([])
+    const [sentences, setSentences] = useState<Sentence[]>([])
     const [userInput, setUserInput] = useState<string>('')
     const prevInput = useRef<string>("")
     const myGrammar = useMemo(() => {
-        // const myTree = new TernaryTree(new TSNode(new Symbol("S")))
-        // myTree.insert(["NP", "VP"])
-        // myTree.insert(["PN"])
-        // myTree.insert(["she"])
-        // myTree.insert(["VP", "PP"])
-        // myTree.insert(["V", "NP"])
-        // myTree.insert(["eats"])
-        // myTree.insert(["NP"])
-        // myTree.insert(["Det", "N"])
-        // myTree.insert(["a"])
-        // myTree.insert(["fish"])
-        // myTree.insert(["P", "NP"])
-        // myTree.insert(["P"])
-        // myTree.insert(["with"])
-        // myTree.insert(["Det", "N"])
-        // myTree.insert(["a"])
-        // myTree.insert(["fork"])
-        const palindrome = [
-            "S -> a S a | b S b | a | b | lam"
+        const productions1 = [
+            "S -> NP VP",
+            "NP -> NP PP | N",
+            "PP -> P NP",
+            "VP -> V NP | VP PP",
+
+            "P -> with",
+            "V -> saw",
+            "N -> astronomers | ears | stars | telescopes"
         ]
 
-        return new Grammar1_0(palindrome);
+        const palindrome = [
+            "S -> A S A | B S B | C S C | A | B | C",
+            "A -> a",
+            "B -> b",
+            "C -> c"
+        ]
+
+        return new CFGrammar(productions1);
     }, []);
 
     useEffect(() => {
-        setStrings(myGrammar.getStrings(getRandomNumber()))
+        setSentences(myGrammar.sentences)
     }, [])
 
-    const itemDidTap = (sentence: string) => {
+    const itemDidTap = (sentence: Sentence) => {
+        StaticStorage.data.set("grammar", myGrammar)
         // @ts-ignore
         navigation.navigate("Chart", {
-            sentence: sentence
+            sentence: sentence,
+            key: "grammar"
         })
     }
 
-    const renderStringList = (data: { item: string; index: number; }) => {
-        const {item, index} = data
-        return <Item itemDidTap={itemDidTap} string={item} index={index+1}/>
+    const renderSentenceList = (data: ListRenderItemInfo<Sentence>) => {
+        return <SentenceItem itemDidTap={itemDidTap} sentence={data.item} index={data.index+1}/>
     }
 
     const memorizedFlatList = useMemo(() => {
         return (
             <FlatList
                 style={styles.list}
-                data={strings}
-                renderItem={renderStringList}/>
+                data={sentences}
+                renderItem={renderSentenceList}/>
         )
-    }, [strings])
+    }, [sentences])
 
     const memorizedOnPress = useCallback(() => {
-        setStrings(myGrammar.getStrings(getRandomNumber()))
+        setSentences(myGrammar.sentences)
         if (userInput.trim().length === 0 || prevInput.current === userInput) return
         console.log(userInput)
         setUserInput("")

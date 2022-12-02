@@ -1,21 +1,22 @@
 /*eslint-disable*/
 
-import {Dimensions, StyleSheet, Text, View, TouchableOpacity, GestureResponderEvent} from "react-native";
+import {Dimensions, StyleSheet, Text, View, TouchableOpacity} from "react-native";
+import {Sentence} from "../models/grammarModels/sentence";
 
-const Item = (props: { string: string, index: number, itemDidTap: (sentence: string)=> void }) => {
+const SentenceItem = (props: { sentence: Sentence, index: number, itemDidTap: (sentence: Sentence)=> void }) => {
     const {
-        string,
+        sentence,
         index,
         itemDidTap
     } = props
 
     return (
-        <TouchableOpacity style={styles.container} onPress={() => itemDidTap(string)}>
+        <TouchableOpacity style={styles.container} onPress={() => itemDidTap(sentence)}>
             <View style={styles.numberLabel}>
                 <Text style={styles.index}>{index}</Text>
             </View>
             <View style={styles.sentence}>
-                <Text style={styles.text}>{string}</Text>
+                <Text style={styles.text}>{sentence.getSentence()}</Text>
             </View>
         </TouchableOpacity>
     )
@@ -57,4 +58,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Item
+export default SentenceItem
