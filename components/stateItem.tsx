@@ -10,20 +10,21 @@ const StateItem = (props: {state: State}) => {
         state
     } = props
     return (
-        <View style={styles.container}>
+        <View style={styles.chartContainer}>
             <Text style={styles.id}>{state.id}</Text>
             <Text style={styles.lhs}>{state.lhs}</Text>
             <Text style={styles.arrow}>{"=>"}</Text>
             <Text style={styles.rhs}>{state.rhs.termsToString()}</Text>
             <Text style={styles.positions}>{state.position()}</Text>
-            <Text style={styles.backPointer}>{state.backPointersInSting()}</Text>
+            <Text style={styles.backPointer}>{state.backPointersInString()}</Text>
             <Text style={styles.addedBy}>{state.addedBy}</Text>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
+
+    chartContainer: {
         flex: 7,
         flexDirection: "row",
         justifyContent: "center",
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
         flex: 0.6,
         textAlign: "center",
         justifyContent: "center",
-        backgroundColor: "red"
+        color: "blue"
     },
     lhs: {
         flex: 0.7,

@@ -3,7 +3,7 @@
 import {Chart} from "./chart";
 import {Grammar} from "./grammar";
 import {RHS} from "./rhs";
-import {EarleyOperators, State, StaticStorage} from "./state";
+import {EarleyOperators, State} from "./state";
 import {Sentence} from "./sentence";
 
 export class EarleyParser {
@@ -42,12 +42,12 @@ export class EarleyParser {
         return this._charts
     }
 
-    public async parseSentence() {
+    public parseSentence() {
         let start1 = ["@", "S"]
         let startRHS = new RHS(start1)
         let state = new State(0, 0,"T", startRHS, this.get_new_id(),[], EarleyOperators.NONE)
         this._charts[0].addState(state)
-        for await (const chart of this._charts) {
+        for (const chart of this._charts) {
             for (const state of chart.states) {
                 let next_term = state.getAfterDot()
                 if (state.isDotLast()) {
@@ -61,15 +61,15 @@ export class EarleyParser {
                 }
             }
         }
-        return await this.derivationTrees()
+        return this.derivationTrees()
     }
 
 
-    public async derivationTrees(){
+    public derivationTrees(){
         let parseTree: State[][] = []
         for  (const state of this.charts[this._sentence.words.length].states) {
             if (state.lhs == "S" && state.start == 0 && state.end == this._sentence.words.length && state.isDotLast()) {
-                let states = await this.helper(state, [])
+                let states = this.helper(state, [])
                 parseTree.push(states)
             }
         }
@@ -77,11 +77,11 @@ export class EarleyParser {
         return parseTree
     }
 
-    private async helper(state: State, arrState: State[]): Promise<State[]> {
+    private helper(state: State, arrState: State[]): State[] {
         arrState.push(state)
         for (const backPointer of state.back_pointers) {
             if (backPointer.back_pointers.length >= 1) {
-                arrState.concat(await this.helper(backPointer, arrState))
+                arrState.concat(this.helper(backPointer, arrState))
             } else {
                 arrState.push(backPointer)
             }

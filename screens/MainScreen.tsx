@@ -20,7 +20,7 @@ const MainScreen = (props: { navigation: NavigationProp<object> }) => {
     const [userInput, setUserInput] = useState<string>('')
     const prevInput = useRef<string>("")
     const myGrammar = useMemo(() => {
-        const productions1 = [
+        const ambiguousGrammar = [
             "S -> NP VP",
             "NP -> NP PP | N",
             "PP -> P NP",
@@ -38,7 +38,7 @@ const MainScreen = (props: { navigation: NavigationProp<object> }) => {
             "C -> c"
         ]
 
-        return new CFGrammar(productions1);
+        return new CFGrammar(ambiguousGrammar);
     }, []);
 
     useEffect(() => {
@@ -46,11 +46,12 @@ const MainScreen = (props: { navigation: NavigationProp<object> }) => {
     }, [])
 
     const itemDidTap = (sentence: Sentence) => {
-        StaticStorage.data.set("grammar", myGrammar)
+        let randomKey = Math.random() * 10000000
+        StaticStorage.data.set(randomKey.toString(), myGrammar)
         // @ts-ignore
         navigation.navigate("Chart", {
             sentence: sentence,
-            key: "grammar"
+            key: randomKey.toString()
         })
     }
 
@@ -80,7 +81,7 @@ const MainScreen = (props: { navigation: NavigationProp<object> }) => {
     }, []);
 
     return (
-        <View style={styles.container}>
+        <View style={styles.chartContainer}>
             <InputField
                 myOnTextChange={memorizedOnTextChange}
                 userInput={userInput}></InputField>
@@ -91,7 +92,7 @@ const MainScreen = (props: { navigation: NavigationProp<object> }) => {
 };
 
 const styles = StyleSheet.create({
-    container: {
+    chartContainer: {
         flex: 1,
         backgroundColor: "#dfe6e9",
         alignItems: "center",

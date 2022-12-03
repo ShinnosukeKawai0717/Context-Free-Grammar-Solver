@@ -24,8 +24,8 @@ const Stack = createNativeStackNavigator();
 const App = () =>{
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName={"Main"}>
-                <Stack.Screen name={"Main"} component={MainScreen} />
+            <Stack.Navigator initialRouteName={"CFG Solver"}>
+                <Stack.Screen name={"CFG Solver"} component={MainScreen}/>
                 <Stack.Screen name={"Chart"} component={ChartScreen}/>
             </Stack.Navigator>
         </NavigationContainer>

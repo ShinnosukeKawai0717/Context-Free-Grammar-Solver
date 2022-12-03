@@ -14,7 +14,7 @@ const ChartView = (props: {parser: EarleyParser}) => {
         parser.charts.map((chart) => {
             return (
                 <View>
-                    <Text style={styles.chartStyle}>{"Chart:\t\t"+chart.id}</Text>
+                    <Text style={styles.textStyle}>{"Chart:\t\t"+chart.id}</Text>
                     <View>
                         {chart.states.map((state)=> {{
                             return (
@@ -29,7 +29,7 @@ const ChartView = (props: {parser: EarleyParser}) => {
 };
 
 const styles = StyleSheet.create({
-    chartStyle: {
+    textStyle: {
         textDecorationLine: "underline",
         textAlign: "center",
         fontSize: 20,

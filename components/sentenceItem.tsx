@@ -11,18 +11,18 @@ const SentenceItem = (props: { sentence: Sentence, index: number, itemDidTap: (s
     } = props
 
     return (
-        <TouchableOpacity style={styles.container} onPress={() => itemDidTap(sentence)}>
+        <TouchableOpacity style={styles.chartContainer} onPress={() => itemDidTap(sentence)}>
             <View style={styles.numberLabel}>
                 <Text style={styles.index}>{index}</Text>
             </View>
             <View style={styles.sentence}>
-                <Text style={styles.text}>{sentence.getSentence()}</Text>
+                <Text style={styles.text}>{sentence.toString()}</Text>
             </View>
         </TouchableOpacity>
     )
 }
 const styles = StyleSheet.create({
-    container: {
+    chartContainer: {
         flex: 1,
         borderRadius: 10,
         marginTop: 10,
@@ -35,12 +35,12 @@ const styles = StyleSheet.create({
         alignSelf: "center"
     },
     text:{
-        fontSize: 30,
+        fontSize: 20,
         textAlign: "center",
         fontStyle: "italic",
     },
     index: {
-        fontSize: 30,
+        fontSize: 20,
         color: "red",
         textAlign: "center",
         fontStyle: "italic",

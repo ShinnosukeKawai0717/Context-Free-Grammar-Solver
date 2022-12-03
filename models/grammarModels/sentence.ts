@@ -10,7 +10,7 @@ export class Sentence {
         return this._words
     }
 
-    public getSentence() {
+    public toString() {
         return this.words.join(" ")
     }
 }

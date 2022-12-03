@@ -30,7 +30,7 @@ export class State {
     }
 
     public stateInfo() {
-        console.info("ID: "+ this._id + "\t(" + this._start + ", " + this._end + ")\t" + this._lhs + " => " + this._rhs.terms + "\t\t" + this._addedBy + "\t" + this.backPointersInSting())
+        console.info("ID: "+ this._id + "\t(" + this._start + ", " + this._end + ")\t" + this._lhs + " => " + this._rhs.terms + "\t\t" + this._addedBy + "\t" + this.backPointersInString())
     }
 
     public get lhs() {
@@ -61,7 +61,7 @@ export class State {
         return this._back_pointers
     }
 
-    public backPointersInSting(){
+    public backPointersInString(){
         let pointer = ""
         if (this._back_pointers.length == 0) {
             return "[]"
