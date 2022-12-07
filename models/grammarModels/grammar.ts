@@ -2,9 +2,22 @@
 import {RHS} from "./rhs";
 import {Sentence} from "./sentence";
 
+export class Utility {
+    static randomID(length: number){
+        let result           = '';
+        let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let charactersLength = characters.length;
+        for (let i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    }
+}
+
 export class Grammar {
     private readonly _rules: Map<string, RHS[]>
     private readonly _terminals: string[]
+
     private readonly _terminalRules: Map<string, string[]>
     private _sentences: Sentence[]
     constructor() {
@@ -40,7 +53,7 @@ export class Grammar {
     }
 
     private generateStrings() {
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 5; i++) {
             let sentence = this.generate("S")
             let obj = new Sentence(sentence)
             this._sentences.push(obj)
@@ -95,8 +108,10 @@ export class Grammar {
 }
 
 export class CFGrammar extends Grammar {
+    private readonly _id: string
     constructor(productions: string[]) {
         super();
+        this._id = Utility.randomID(10)
         for (const production of productions) {
             let lhs = production.split(" -> ")[0]
             // check if lhs is terminal
@@ -118,6 +133,10 @@ export class CFGrammar extends Grammar {
                 this.rules.set(lhs, rhsArr)
             }
         }
+    }
+
+    public get id() {
+        return this._id
     }
 
     private isTerminal(lhs: string){

@@ -15,7 +15,6 @@ const StateItem = (props: {state: State}) => {
             <Text style={styles.lhs}>{state.lhs}</Text>
             <Text style={styles.arrow}>{"=>"}</Text>
             <Text style={styles.rhs}>{state.rhs.termsToString()}</Text>
-            <Text style={styles.positions}>{state.position()}</Text>
             <Text style={styles.backPointer}>{state.backPointersInString()}</Text>
             <Text style={styles.addedBy}>{state.addedBy}</Text>
         </View>
@@ -25,7 +24,7 @@ const StateItem = (props: {state: State}) => {
 const styles = StyleSheet.create({
 
     chartContainer: {
-        flex: 7,
+        flex: 6,
         flexDirection: "row",
         justifyContent: "center",
         marginTop: 9,
@@ -47,10 +46,6 @@ const styles = StyleSheet.create({
     },
     rhs: {
         flex: 1.7,
-        textAlign: "center"
-    },
-    positions: {
-        flex: 1,
         textAlign: "center"
     },
     backPointer: {

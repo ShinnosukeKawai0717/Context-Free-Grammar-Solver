@@ -19,7 +19,8 @@ const InputField = (props: {myOnTextChange: (text: string) => void,
             cursorColor={"gray"}
             placeholder={"type here..."}
             keyboardType={"web-search"}
-            textAlign={"left"}>
+            textAlign={"left"}
+            multiline={true}>
         </TextInput>
     );
 };
@@ -27,8 +28,7 @@ const InputField = (props: {myOnTextChange: (text: string) => void,
 const styles = StyleSheet.create({
   input: {
       width: Dimensions.get("window").width - 20,
-      height: 50,
-      padding: 13,
+      paddingLeft: 20,
       borderRadius: 20,
       backgroundColor: "white",
       color: "black",
@@ -37,8 +37,9 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.7,
       fontSize: 20,
       alignSelf: "center",
-      marginBottom: 5,
-      marginTop: 5
+      marginTop: 5,
+      paddingTop: 20,
+      paddingBottom: 20
   }
 });
 

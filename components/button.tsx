@@ -9,18 +9,16 @@ const GenerateButton = (props: { onPressFromParent: () => void}) => {
     } = props
 
     return (
-        <TouchableOpacity style={styles.button} onPress={onPressFromParent}>
-            <Text style={{fontSize: 30, color: "turquoise"}}>Generate</Text>
+        <TouchableOpacity style={styles.buttonContainer} onPress={onPressFromParent}>
+            <Text style={{marginStart: 20, marginEnd: 20, fontSize: 30, color: "turquoise"}}>Generate</Text>
         </TouchableOpacity>
     );
 };
 
 const styles = StyleSheet.create({
-    button: {
-        flex: 0.06,
+    buttonContainer: {
+        flex: 0.1,
         backgroundColor: "white",
-        width: 200,
-        height: 50,
         borderRadius: 20,
         marginBottom: 30,
         marginTop: 5,
@@ -28,7 +26,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         shadowOpacity: 0.8,
         shadowColor: "gray",
-        shadowOffset: {width: 5, height: 5}
+        shadowOffset: {width: 5, height: 5},
     },
 })
 

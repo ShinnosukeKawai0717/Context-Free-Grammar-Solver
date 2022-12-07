@@ -79,13 +79,6 @@ export class RHS {
         return false
     }
 
-    public getPriorToDot() {
-        if (this._hasDot && this._dot > 0) {
-            return this._terms[this._dot-1]
-        }
-        return ""
-    }
-
     public getAfterDot() {
         if (this._hasDot && this._dot < this._terms.length-1) {
             return this._terms[this._dot+1]

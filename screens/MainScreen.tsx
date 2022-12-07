@@ -1,57 +1,60 @@
 /*eslint-disable*/
 
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {Text, StyleSheet, View, Dimensions, FlatList, ListRenderItemInfo} from 'react-native';
+import {Dimensions, FlatList, ListRenderItemInfo, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import SentenceItem from "../components/sentenceItem";
-import InputField from "../components/textField";
 import GenerateButton from "../components/button";
-import {
-    NavigationProp
-} from "@react-navigation/native";
-import {CFGrammar, Grammar} from "../models/grammarModels/grammar";
+import {NavigationProp} from "@react-navigation/native";
+import {CFGrammar, Utility} from "../models/grammarModels/grammar";
 import {Sentence} from "../models/grammarModels/sentence";
 import {StaticStorage} from "./ChartScreen";
+import TextField from "../components/textField";
 
-const MainScreen = (props: { navigation: NavigationProp<object> }) => {
-    const {
-        navigation
-    } = props
-    const [sentences, setSentences] = useState<Sentence[]>([])
-    const [userInput, setUserInput] = useState<string>('')
-    const prevInput = useRef<string>("")
-    const myGrammar = useMemo(() => {
-        const ambiguousGrammar = [
+const grammars = [
+    {
+        grammar: [
             "S -> NP VP",
             "NP -> NP PP | N",
             "PP -> P NP",
             "VP -> V NP | VP PP",
-
             "P -> with",
             "V -> saw",
             "N -> astronomers | ears | stars | telescopes"
-        ]
-
-        const palindrome = [
+        ],
+        type: "Ambiguous"
+    },
+    {
+        grammar: [
             "S -> A S A | B S B | C S C | A | B | C",
             "A -> a",
             "B -> b",
             "C -> c"
-        ]
+        ],
+        type: "Unambiguous"
+    }
+]
+const MainScreen = (props: { navigation: NavigationProp<object> }) => {
+    const {
+        navigation
+    } = props
+    const [isTapped, setIsTapped] = useState(false);
+    const [grammar, setGrammar] = useState<string[]>(
+        ["S -> A S A | B S B | C S C | A | B | C", "A -> a", "B -> b", "C -> c"]
+    )
+    const [userInput, setUserInput] = useState<string>("")
 
-        return new CFGrammar(ambiguousGrammar);
-    }, []);
-
-    useEffect(() => {
-        setSentences(myGrammar.sentences)
-    }, [])
+    const memorizedGrammar = useMemo(() => {
+        return new CFGrammar(grammar)
+    }, [grammar])
 
     const itemDidTap = (sentence: Sentence) => {
-        let randomKey = Math.random() * 10000000
-        StaticStorage.data.set(randomKey.toString(), myGrammar)
+        StaticStorage.data.clear()
+        const randomKey = Utility.randomID(10)
+        StaticStorage.data.set(randomKey, memorizedGrammar)
         // @ts-ignore
         navigation.navigate("Chart", {
             sentence: sentence,
-            key: randomKey.toString()
+            key: randomKey
         })
     }
 
@@ -60,31 +63,51 @@ const MainScreen = (props: { navigation: NavigationProp<object> }) => {
     }
 
     const memorizedFlatList = useMemo(() => {
-        return (
-            <FlatList
-                style={styles.list}
-                data={sentences}
-                renderItem={renderSentenceList}/>
-        )
-    }, [sentences])
+        if (memorizedGrammar){
+            return (
+                <FlatList
+                    style={styles.list}
+                    data={memorizedGrammar.sentences}
+                    renderItem={renderSentenceList}/>
+            )
+        }
+        return null
+    }, [isTapped, memorizedGrammar.id])
 
     const memorizedOnPress = useCallback(() => {
-        setSentences(myGrammar.sentences)
-        if (userInput.trim().length === 0 || prevInput.current === userInput) return
-        console.log(userInput)
-        setUserInput("")
-    }, [userInput])
+        if (memorizedGrammar != null) setIsTapped(prevState => !prevState)
+    }, [])
+
+    const memorizedOnGrammarPicked = useCallback((grammar: string[]) => {
+        setGrammar(grammar)
+        setUserInput(grammar.join("\n"))
+    }, []);
 
     const memorizedOnTextChange = useCallback((text: string) => {
-        prevInput.current = userInput
         setUserInput(text)
     }, []);
 
+    const grammarList = useMemo(() => {
+        return (
+            <View style={styles.grammars}>
+                {
+                    grammars.map((value, index) => {
+                        return (
+                            <TouchableOpacity onPress={()=>memorizedOnGrammarPicked(value.grammar)} key={index} style={styles.grammar}>
+                                <Text style={{fontSize: 30, textAlign: "center"}}>{value.type+" Grammar"}</Text>
+                            </TouchableOpacity >
+                        )
+                    })
+                }
+            </View>
+        )
+    }, []);
     return (
-        <View style={styles.chartContainer}>
-            <InputField
-                myOnTextChange={memorizedOnTextChange}
-                userInput={userInput}></InputField>
+        <View style={styles.mainContainer}>
+            <View style={styles.textField}>
+                <TextField userInput={userInput} myOnTextChange={memorizedOnTextChange}></TextField>
+            </View>
+            {grammarList}
             {memorizedFlatList}
             <GenerateButton onPressFromParent={memorizedOnPress}/>
         </View>
@@ -92,17 +115,30 @@ const MainScreen = (props: { navigation: NavigationProp<object> }) => {
 };
 
 const styles = StyleSheet.create({
-    chartContainer: {
+    mainContainer: {
         flex: 1,
         backgroundColor: "#dfe6e9",
         alignItems: "center",
         flexDirection: "column",
     },
+    textField: {
+        flex: 0.5,
+    },
+    grammars: {
+        flex: 0.3,
+        width: Dimensions.get("screen").width-100,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    grammar: {
+        marginBottom: 10,
+        width: Dimensions.get("screen").width-100,
+    },
     list: {
-        flex: 0.9,
+        flex: 0.2,
         width: Dimensions.get("window").width,
-        alignSelf: "center",
-    }
+        alignSelf: "center"
+    },
 });
 
 export default MainScreen;

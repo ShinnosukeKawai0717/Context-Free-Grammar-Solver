@@ -77,10 +77,6 @@ export class State {
         return "[" + this.start + ", " + this.end + "]"
     }
 
-    public getPriorToDot() {
-        return this._rhs.getPriorToDot()
-    }
-
     public getAfterDot() {
         return this._rhs.getAfterDot()
     }

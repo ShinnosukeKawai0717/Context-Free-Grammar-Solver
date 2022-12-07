@@ -26,12 +26,9 @@ const ChartScreen = (props: {route: any, navigation: NavigationProp<any>}) => {
 
     const parser = useMemo(() => {
         let grammar = StaticStorage.data.get(key)
-        return new EarleyParser(grammar, sentence);
-    }, [key]);
-
-    useEffect(() => {
+        let earleyParser = new EarleyParser(grammar, sentence)
         const getTrees = async () => {
-            return parser.parseSentence()
+            return earleyParser.parseSentence()
         }
 
         setTimeout(() => {
@@ -39,9 +36,9 @@ const ChartScreen = (props: {route: any, navigation: NavigationProp<any>}) => {
                 setTrees(trees)
                 setIsLoading(false)
             });
-        }, 1000)
-
-    }, [parser]);
+        }, 800)
+        return earleyParser
+    }, [key]);
 
     const memoChartView = useMemo(() => {
          return !isLoading ?
@@ -103,7 +100,7 @@ const ChartScreen = (props: {route: any, navigation: NavigationProp<any>}) => {
                     <Text style={{fontSize: 20, textAlign: "center"}}>
                         {"Derivation Tree for"}
                     </Text>
-                    <Text style={{fontSize: 20, textAlign: "center", color: "#00ff00"}}>
+                    <Text style={{fontSize: 20, textAlign: "center", color: "#d63031"}}>
                         {sentence.toString()}
                     </Text>
                 </View>
@@ -116,22 +113,35 @@ const ChartScreen = (props: {route: any, navigation: NavigationProp<any>}) => {
 const styles = StyleSheet.create({
     chartContainer: {
         flex: 1,
-        width: Dimensions.get("window").width
+        width: Dimensions.get("window").width-20,
+        backgroundColor: "white",
+        borderRadius: 40,
+        marginTop: 20,
+        marginBottom: 20,
+        marginEnd: 10,
+        marginStart: 10
     },
     treeContainer: {
-        width: Dimensions.get("window").width,
+        width: Dimensions.get("window").width-20,
         flex: 1,
+        backgroundColor: "white",
+        borderRadius: 40,
+        marginTop: 20,
+        marginBottom: 20,
+        marginEnd: 10,
+        marginStart: 10
     },
     sentenceLabel: {
-        flex: 0.1,
-        justifyContent: "center"
+        flex: 0.2,
+        justifyContent: "center",
+        color: "#d63031"
     },
     treeLabel: {
         flex: 0.2,
         justifyContent: "center"
     },
     chartView :{
-        flex: 0.9,
+        flex: 0.8,
         marginBottom: 20,
         marginHorizontal: 6
     },
@@ -147,13 +157,14 @@ const styles = StyleSheet.create({
     sentenceStyle: {
         fontSize: 20,
         textAlign: "center",
+        color: "#d63031"
     },
     textStyle: {
         textDecorationLine: "underline",
         textAlign: "center",
         fontSize: 25,
         marginTop: 10,
-        color: "blue"
+        color: "#d63031"
     }
 });
 
