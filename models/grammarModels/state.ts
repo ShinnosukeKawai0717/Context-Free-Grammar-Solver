@@ -9,7 +9,6 @@ export enum EarleyOperators {
     NONE = "Starter"
 }
 
-
 export class State {
     private readonly _lhs: string
     private readonly _start: number

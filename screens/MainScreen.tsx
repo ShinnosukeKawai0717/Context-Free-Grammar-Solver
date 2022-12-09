@@ -44,6 +44,7 @@ const MainScreen = (props: { navigation: NavigationProp<object> }) => {
     const [userInput, setUserInput] = useState<string>("")
 
     const memorizedGrammar = useMemo(() => {
+        console.log("Emorized grammar")
         return new CFGrammar(grammar)
     }, [grammar])
 
@@ -75,6 +76,15 @@ const MainScreen = (props: { navigation: NavigationProp<object> }) => {
     }, [isTapped, memorizedGrammar.id])
 
     const memorizedOnPress = useCallback(() => {
+        /*
+        S -> NP VP | VP
+        NP -> Det Nominal
+        Nominal -> Noun
+        VP -> Verb | Verb NP
+        Det -> that | this | a | the
+        Noun -> book | flight | meal | money
+        Verb -> book | include | prefer
+         */
         if (memorizedGrammar != null) setIsTapped(prevState => !prevState)
     }, [])
 
